@@ -43,7 +43,7 @@
 
     SELECT name
     FROM   employees
-    WHERE  ( email <> '' ) IS NOT TRUE
+    WHERE  email IS NULL
             OR NOT email LIKE '%dualbootpartners.com' 
 
 ### Получить список работников нанятых в последние 30 дней
@@ -79,10 +79,8 @@
 
 ### Показать сотрудников с зарплатой выше средней по всей компании
 
-    SELECT *
-    FROM   (SELECT employees.NAME,
-                employees.salary,
-                Avg(employees.salary)
-                    OVER () AS average
-            FROM   employees) AS decorated
-    WHERE  salary > average 
+SELECT employees.NAME,
+       employees.salary
+FROM   employees
+WHERE  employees.salary > (SELECT Avg(salary)
+                           FROM   employees) 
